@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const userschema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: [true, "A user must have a name"],
@@ -21,7 +21,13 @@ const userschema = new mongoose.Schema({
     },
     phone: {
         type: Number
+    },
+    isAdmin:{
+        type: Boolean,
+        default: false
     }
 });
 
-module.exports = mongoose.model('User', userschema);
+module.exports = mongoose.model('User', userSchema);
+
+

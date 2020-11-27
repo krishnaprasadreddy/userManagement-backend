@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 
 exports.getUser = async (req, res) => {
     try {
+
         //  const users = await User.find().sort('-created_on');
         let user = req.user;
         res.status(200).json(user);
@@ -54,7 +55,7 @@ exports.login = async (req, res) => {
             console.log(user);
             if (user) {
                 console.log("if")
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ id: user._id,isAdmin : user.isAdmin }, process.env.JWT_SECRET, {
                     expiresIn: '7d'
                 });
                 res.status(200).json({
@@ -82,7 +83,7 @@ exports.login = async (req, res) => {
 
 exports.protectRoute = async (req, res, next) => {
     try {
-        console.log(req.headers);
+      //  console.log(req.headers);
         const token = req.headers.authorization;
         console.log(`token is ${token}`);
 
@@ -97,7 +98,7 @@ exports.protectRoute = async (req, res, next) => {
         } else {
             try {
                 const tokenObj = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-                console.log("id is " + JSON.stringify(tokenObj.id));
+             //   console.log("id is " + JSON.stringify(tokenObj.id));
                 const user = await User.findById(tokenObj.id);
                 if (user) {
                     req.user = user;
